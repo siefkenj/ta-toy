@@ -13,7 +13,11 @@ assigned to that TA will be displayed. In all, there are four views:
 3. A view that allows the user to select a TA provided a course is selected.
 4. A view that displays all tutorial/lecture sections taught provided a course and TA are selected.
 
-## What's provided
+## What's Provided
+
+An `index.html` which loads the needed javascript libraries. The container app is in `js/app.js` and 
+stubs for the three other components are in `js/component-...js`. As well, `get_info.php` is provided
+which supplies dummy data for populating the app.
 
 ## Getting Data
 
@@ -31,3 +35,7 @@ To get a list of sections
 
 Every query returns a JSON object with a `TYPE` attribute which is either `courses`, `tas`, `sections`, or `error`.
 
+## What's Next
+
+After you get an app working with the dummy data from `get_info.php`, you can tackle getting a mariadb instance
+set up and having a php script gather information from a database.
