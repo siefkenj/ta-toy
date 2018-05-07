@@ -55,3 +55,20 @@ navbar h1 {
     padding-right: 5px;
     max-width: 700px;
 }
+.sections{
+  margin: 20px;
+  border-top: 6px;
+  background-color: #99c7ff;
+
+}
+.section_data{
+  text-align: center;
+  padding: 5px;
+  background-color: #f2f2f2;
+}
+.section_data:hover{
+  background-color: #f21111;
+}
+.section_data:active{
+  background-color: #111411;
+}

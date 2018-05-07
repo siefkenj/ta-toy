@@ -67,4 +67,4 @@ if ($course == 'MAT223H1S' && $ta == 'Wanda Zhu') {
 }
 
     print('{ "TYPE": "error" }');
-?> 
+?>
