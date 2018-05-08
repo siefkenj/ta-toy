@@ -12,10 +12,8 @@ window.Sections = Vue.component('Sections',{
     let url = "../get_info.php?course="+to.params.course+"&ta="+to.params.ta
     fetch(url)
     .then((res) => res.json())
-                          .then((data) =>{console.log(data);
-                                next(
-                                  (vm) => {vm.section_data = data;vm.loading = false}
-                                )})
+                          .then((data) =>
+                                next((vm) => {vm.section_data = data;vm.loading = false}                               ))
                           .catch((err) => next((vm) => vm.error = err.toString()));
 
   },
