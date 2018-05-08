@@ -17,14 +17,6 @@ window.TAs = Vue.component('TAs', {
             }).catch( error => { console.log(error) })
         },
 
-
-        methods:{
-            onClick:function(){
-                console.log('press')
-            },
-        },
-
-
     template:'<div v-bind:style="{ marginLeft: 100+ \'px\', paddingTop: 25+ \'px\'}">'+
         '<router-link to="/course">Back to Courses</router-link>'+
         '<ul v-for="TA in TAs">'+
