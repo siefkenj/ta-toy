@@ -19,7 +19,7 @@ window.Courses = Vue.component('Courses', {
         let list;
         console.log("123");
         /* Fetch the returned json object value. */
-        fetch('../get_info.php').then(function (response) {
+        fetch('get_info.php').then(function (response) {
             self.list = response.json().then(function (data) {
                 self.list = data.DATA;
                 next(
@@ -33,6 +33,8 @@ window.Courses = Vue.component('Courses', {
     },
     template: '<div id="app-course">' +
         '<ul id="app-course">' +
-        '<li v-for="course in list">{{ course }}</li>' +
+        '<li v-for="element in list">' +
+        '<router-link :to="{ name:\'TAs\', params:{course: element}}">' +
+        '{{ element }}</router-link></li>' +
         '</ul></div>'
 });
