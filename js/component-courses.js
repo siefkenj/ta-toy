@@ -17,7 +17,7 @@ window.Courses = Vue.component('Courses', {
     },
     beforeRouteEnter (to, from, next) {
         let list;
-        console.log("123");
+        // console.log("123");
         /* Fetch the returned json object value. */
         fetch('get_info.php').then(function (response) {
             self.list = response.json().then(function (data) {
@@ -27,7 +27,7 @@ window.Courses = Vue.component('Courses', {
                         vm.list = self.list;
                     }
                 )
-                console.log(data.DATA);
+                // console.log(data.DATA);
             });
         });
     },
