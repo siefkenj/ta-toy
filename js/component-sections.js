@@ -1,6 +1,6 @@
 // export as global since we're not using a module system
 window.Sections = Vue.component("Sections", {
-    data() {
+    data: function() {
         return {
             loading: true,
             section_data: null,
@@ -35,10 +35,13 @@ window.Sections = Vue.component("Sections", {
         <div v-if="error" class="error">
         {{ error }}
         </div>
-        <div v-if="section_data">
+        <div v-else-if="section_data">
         <div v-for="item in section_data.DATA" class="section_data">
         <a>{{ item }}</a>
         </div>
+        </div>
+        <div v-else>
+        No section is available for {{$route.params.ta}}
         </div>
         </div>
         </div>
