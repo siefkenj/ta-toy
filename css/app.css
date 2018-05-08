@@ -1,3 +1,11 @@
+:root {
+    --primary: #5795f9;
+    --second: #644cad;
+    --third: #4426a8;
+    --main-txt-color: blue;
+    --main-padding: 15px;
+}
+
 html,
 body {
     width: 100%;
@@ -16,7 +24,6 @@ body {
     min-height: 100vh;
     width: 100%;
     font-size: 18px;
-
     line-height: 22px;
     text-rendering: geometricPrecision;
     display: flex;
@@ -54,4 +61,24 @@ navbar h1 {
     padding-left: 5px;
     padding-right: 5px;
     max-width: 700px;
+}
+.sections {
+    color: var(--primary);
+    text-decoration: none;
+    margin: 20px;
+    border-top: 6px;
+}
+.section_data {
+    text-align: center;
+    padding: 5px;
+    background-color: #f2f2f2;
+}
+.section_data:hover {
+    color: #fff;
+}
+.section_data:focus {
+    color: #fff;
+}
+.section_data:active {
+    background-color: #111411;
 }
