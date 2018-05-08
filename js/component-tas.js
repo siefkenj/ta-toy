@@ -1,2 +1,33 @@
 // export as global since we're not using a module system
-window.TAs = { template: '<div>TAs {{$route.params.course}}</div>' }
+window.TAs = Vue.component('TAs', {
+
+        data: function () {
+        return {
+            TAs:null,
+            course:null,
+        }},
+
+        beforeRouteEnter(to, from, next){
+            fetch("../get_info.php?course="+to.params.course)
+            .then((response)=>{return response.json()})
+            .then((data)=>{
+                next(
+                    (vm) => vm.TAs = data.DATA
+                )
+            }).catch( error => { console.log(error) })
+        },
+
+
+        methods:{
+            onClick:function(){
+                console.log('press')
+            },
+        },
+
+
+    template:'<div><ul v-for="TA in TAs">'+
+    '<router-link :to="{ name: \'section\', params: {ta: TA}}">{{TA}}</router-link>'+
+    '</ul>'+
+    '</div>'
+
+})

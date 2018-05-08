@@ -12,7 +12,7 @@
 const routes = [
     { path: "/course", component: Courses },
     { path: "/course/:course", component: TAs },
-    { path: "/course/:course/ta/:ta", component: Sections }
+    { path: "/course/:course/ta/:ta", name: "section", component: Sections }
 ];
 
 // 3. Create the router instance and pass the `routes` option
