@@ -3,7 +3,6 @@ window.TAs = Vue.component("TAs", {
     data: function() {
         return {
             TAs: null,
-            course: null
         };
     },
 
