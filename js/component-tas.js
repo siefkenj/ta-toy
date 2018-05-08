@@ -3,25 +3,24 @@ window.TAs = Vue.component("TAs", {
     // Data to store TA names
     data: function() {
         return {
-            TAs: null,
+            TAs: null
         };
     },
 
-    // API call to get TA names
-    beforeRouteEnter(to, from, next) {
-        fetch("../get_info.php?course=" + to.params.course)
+    mounted() {
+        fetch("../get_info.php?course=" + this.$route.params.course)
             .then(response => {
                 return response.json();
             })
             .then(data => {
-                next(vm => (vm.TAs = data.DATA));
+                this.TAs = data.DATA;
             })
             .catch(error => {
                 console.log(error);
             });
     },
 
-    template:`
+    template: `
         <div v-bind:style=\"{ marginLeft: 100+ 'px', paddingTop: 25+ 'px'}\">
         <router-link to="/course">Back to Courses</router-link>
         <ul v-for="TA in TAs">
