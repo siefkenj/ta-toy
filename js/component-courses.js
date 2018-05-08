@@ -17,7 +17,6 @@ window.Courses = Vue.component("Courses", {
             return response.json()
         })
         .then(data => {
-            console.log(Array.isArray(data.DATA));
             if (Array.isArray(data.DATA)) {
                 console.log(data.DATA);
                 this.list = data.DATA;
