@@ -1,11 +1,13 @@
 // export as global since we're not using a module system
 window.TAs = Vue.component("TAs", {
+    // Data to store TA names
     data: function() {
         return {
             TAs: null,
         };
     },
 
+    // API call to get TA names
     beforeRouteEnter(to, from, next) {
         fetch("../get_info.php?course=" + to.params.course)
             .then(response => {
