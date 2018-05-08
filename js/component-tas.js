@@ -19,11 +19,11 @@ window.TAs = Vue.component("TAs", {
             });
     },
 
-    template:
-        "<div v-bind:style=\"{ marginLeft: 100+ 'px', paddingTop: 25+ 'px'}\">" +
-        '<router-link to="/course">Back to Courses</router-link>' +
-        '<ul v-for="TA in TAs">' +
-        "<router-link :to=\"{ name: 'section', params: {ta: TA}}\">{{TA}}</router-link>" +
-        "</ul>" +
-        "</div>"
+    template:`
+        <div v-bind:style=\"{ marginLeft: 100+ 'px', paddingTop: 25+ 'px'}\">
+        <router-link to="/course">Back to Courses</router-link>
+        <ul v-for="TA in TAs">
+        <router-link :to=\"{ name: 'section', params: {ta: TA}}\">{{TA}}</router-link>
+        </ul>
+        </div>`
 });
