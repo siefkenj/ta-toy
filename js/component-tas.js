@@ -10,7 +10,7 @@ window.TAs = Vue.component("TAs", {
     },
 
     created() {
-        fetch("../get_info.php?course=" + this.$route.params.course)
+        fetch("get_info.php?course=" + this.$route.params.course)
             .then(response => {
                 return response.json();
             })
@@ -20,6 +20,7 @@ window.TAs = Vue.component("TAs", {
             })
             .catch(err => {
                 this.error = err.toString();
+                this.loading = false;
             });
     },
 

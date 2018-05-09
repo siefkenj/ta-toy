@@ -10,7 +10,7 @@ window.Sections = Vue.component("Sections", {
     //fetch data when component is mounted
     mounted: function() {
         let url =
-            "../get_info.php?course=" +
+            "get_info.php?course=" +
             this.$route.params.course +
             "&ta=" +
             this.$route.params.ta;
@@ -20,7 +20,7 @@ window.Sections = Vue.component("Sections", {
                 this.section_data = data;
                 this.loading = false;
             })
-            .catch(err => (this.error = err.toString()));
+            .catch(err => {this.error = err.toString(), loading=false});
     },
     template: `
         <div class="sections">
