@@ -10,7 +10,7 @@ window.Sections = Vue.component("Sections", {
     //fetch data when component is created
     created: function() {
         let url =
-            "../database.php?course=" +
+            "../get_info.php?course=" +
             this.$route.params.course +
             "&ta=" +
             this.$route.params.ta;
