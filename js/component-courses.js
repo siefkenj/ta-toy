@@ -20,7 +20,6 @@ window.Courses = Vue.component("Courses", {
             // If the data type is courses as expected, set the list attribute
             // in this component
             if (data.TYPE == "courses") {
-                console.log(data.DATA);
                 this.list = data.DATA;
             }
             // If it is of other types, tell it to the user
