@@ -13,7 +13,7 @@ window.Courses = Vue.component("Courses", {
     mounted: function () {
         /* Fetch the returned json object value. */
         fetch("get_info.php")
-        .then(function (response) {
+        .then(response => {
             return response.json()
         })
         .then(data => {
@@ -22,11 +22,6 @@ window.Courses = Vue.component("Courses", {
             if (data.TYPE == "courses") {
                 console.log(data.DATA);
                 this.list = data.DATA;
-            }
-            // If the data type is error, display the error message
-            else if (data.TYPE == "error") {
-                console.log("data.DATA is not an appropriate array!");
-                this.err = "The error data is getting back from the php file!";
             }
             // If it is of other types, tell it to the user
             else {
