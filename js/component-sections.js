@@ -20,7 +20,10 @@ window.Sections = Vue.component("Sections", {
                 this.section_data = data;
                 this.loading = false;
             })
-            .catch(err => {this.error = err.toString(); loading=false});
+            .catch(err => {
+                this.error = err.toString();
+                this.loading = false;
+            });
     },
     template: `
         <div class="sections">
