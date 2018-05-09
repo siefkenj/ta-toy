@@ -40,6 +40,7 @@ window.Courses = Vue.component("Courses", {
             <p v-if=loading>Loading...</p>
             <p v-if=err>{{ err }}</p>
             <p v-if=warn>"You are not getting back the course list!"</p>
+            <p>Courses</p>
             <ul id="app-course">
                 <li v-for="element in list">
                     <router-link :to="{ name:\'TAs\', params:{course: element}}">

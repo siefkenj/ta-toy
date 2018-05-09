@@ -25,8 +25,8 @@ window.TAs = Vue.component("TAs", {
     },
 
     template: `
-        <div v-bind:style=\"{ marginLeft: 100+ 'px', paddingTop: 25+ 'px'}\">
-            <router-link to="/course">Back to Courses</router-link>
+        <div>
+            <router-link to="/course">Course</router-link> -> TAs
             <div v-if="loading">
                 <h3>Loading...</h3>
             </div>
