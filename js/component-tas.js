@@ -26,7 +26,7 @@ window.TAs = Vue.component("TAs", {
 
     template: `
         <div>
-            <router-link to="/course">Course</router-link> -> TAs
+            <router-link to="/">Course</router-link> -> TAs
             <div v-if="loading">
                 <h3>Loading...</h3>
             </div>
