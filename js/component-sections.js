@@ -31,7 +31,7 @@ window.Sections = Vue.component("Sections", {
                 Loading...
             </div>
             <div v-else>
-                <router-link to="/">{{$route.params.course}}</router-link> -> <router-link :to="{ name: \'TAs\', params: { course: $route.params.course }}">TAs</router-link> -> {{$route.params.ta}}
+                <router-link to="/">{{$route.params.course}}</router-link> -> <router-link :to="{ name: \'TAs\', params: { course: $route.params.course }}">TAs in {{$route.params.course}}</router-link> -> Sections for {{$route.params.ta}}
                 <div v-if="error" class="error">
                     {{ error }}
                 </div>
