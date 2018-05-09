@@ -5,18 +5,21 @@ window.Courses = Vue.component("Courses", {
         return {
             list: null,
             err: null,
-            warn: false
+            warn: false,
+            loading: true
         };
     },
 
     /* Before this view is rendered, fetch the data from the php file */
-    mounted: function () {
+    created: function () {
         /* Fetch the returned json object value. */
         fetch("get_info.php")
         .then(response => {
             return response.json()
         })
         .then(data => {
+            // Turn off the loading message when the data is ready
+            this.loading = false;
             // If the data type is courses as expected, set the list attribute
             // in this component
             if (data.TYPE == "courses") {
@@ -34,6 +37,7 @@ window.Courses = Vue.component("Courses", {
     },
     template:
         `<div id="app-course">
+            <p v-if=loading>Loading...</p>
             <p v-if=err>{{ err }}</p>
             <p v-if=warn>"You are not getting back the course list!"</p>
             <ul id="app-course">
