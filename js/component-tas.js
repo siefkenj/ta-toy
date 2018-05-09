@@ -7,7 +7,7 @@ window.TAs = Vue.component("TAs", {
         };
     },
 
-    mounted() {
+    created() {
         fetch("../get_info.php?course=" + this.$route.params.course)
             .then(response => {
                 return response.json();
