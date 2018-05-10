@@ -10,7 +10,7 @@ window.TAs = Vue.component("TAs", {
     },
 
     created() {
-        fetch("../get_info.php?course=" + this.$route.params.course)
+        fetch("get_info.php?course=" + this.$route.params.course)
             .then(response => {
                 return response.json();
             })
@@ -20,12 +20,13 @@ window.TAs = Vue.component("TAs", {
             })
             .catch(err => {
                 this.error = err.toString();
+                this.loading = false;
             });
     },
 
     template: `
-        <div v-bind:style=\"{ marginLeft: 100+ 'px', paddingTop: 25+ 'px'}\">
-            <router-link to="/course">Back to Courses</router-link>
+        <div>
+            <router-link to="/">{{$route.params.course}}</router-link> -> TAs in {{$route.params.course}}
             <div v-if="loading">
                 <h3>Loading...</h3>
             </div>
