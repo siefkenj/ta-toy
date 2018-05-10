@@ -13,14 +13,13 @@ const routes = [
     { path: "/", component: Courses },
     { path: "/course/:course/ta/:ta", name: "section", component: Sections },
     { path: "/course/:course", name: "TAs", component: TAs },
-    { path: "/*", component: PageNotFound}
+    { path: "/*", component: Courses}
 ];
 
 // 3. Create the router instance and pass the `routes` option
 // You can pass in additional options here, but let's
 // keep it simple for now.
 const router = new VueRouter({
-    mode:'history',
     routes: routes
 });
 
