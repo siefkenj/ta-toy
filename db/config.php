@@ -8,6 +8,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    $result = array('status' => 'ERROR', 'error' => "Connection failed: " . $e->getMessage());
+    print(json_encode($result, JSON_PRETTY_PRINT));
 }
 ?>
