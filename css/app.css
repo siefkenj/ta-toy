@@ -22,6 +22,11 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+#app {
+    height: 100%;
+}
+
 navbar,
 #footer {
     display: block;
@@ -54,4 +59,11 @@ navbar h1 {
     padding-left: 5px;
     padding-right: 5px;
     max-width: 700px;
+}
+
+/* Keep the footer at the bottom of the page */
+#footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 }
