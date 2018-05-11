@@ -7,18 +7,26 @@ window.Sections = Vue.component("Sections", {
             error: null
         };
     },
-    //fetch data when component is mounted
-    mounted: function() {
+    //fetch data when component is created
+    created: function() {
         let url =
             "../get_info.php?course=" +
             this.$route.params.course +
             "&ta=" +
             this.$route.params.ta;
         fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                this.section_data = data;
+            .then(res => {
+                section_data = error = null;
+                loading: true;
+                return res.json();
+            })
+            .then(result => {
                 this.loading = false;
+                if (result.status == "EMPTY") {
+                    this.error = "No Sections Found";
+                } else {
+                    this.section_data = result;
+                }
             })
             .catch(err => (this.error = err.toString()));
     },
