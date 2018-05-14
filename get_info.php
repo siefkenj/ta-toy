@@ -1,6 +1,6 @@
 <?php
 // Load database configurations
-include ('db/config.php');
+include 'db/config.php';
 
 function arr_get($array, $key, $default = null)
 {
@@ -14,20 +14,25 @@ try {
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmt;
+    $stmt = null;
     if ($course == '') {
         $stmt = $conn->prepare("SELECT DISTINCT Course FROM courses;");
         $result['TYPE'] = "courses";
-    }
-    else if ($ta == '') {
-        $stmt = $conn->prepare("SELECT DISTINCT TA FROM courses WHERE Course ='" . $course . "';");
+    } elseif ($ta == '') {
+        $stmt = $conn->prepare(
+            "SELECT DISTINCT TA FROM courses WHERE Course ='" . $course . "';"
+        );
         $result['TYPE'] = "ta";
-    }
-    else if ($ta != '') {
-        $stmt = $conn->prepare("SELECT DISTINCT Sections FROM courses WHERE Course ='" . $course . "'AND TA = '" . $ta . "';");
+    } elseif ($ta != '') {
+         $stmt = $conn->prepare(
+            "SELECT DISTINCT Sections FROM courses WHERE Course ='" .
+                $course .
+                "'AND TA = '" .
+                $ta .
+                "';"
+        );
         $result['TYPE'] = "section";
-    }
-    else {
+    } else {
         $error = 'Invalid params';
         throw new Exception($error);
     }
@@ -38,17 +43,15 @@ try {
     if (count($query) >= 1) {
         $result['STATUS'] = 'OK';
         $result['DATA'] = $query;
-    }
-    else {
-        $result = array(
-            'STATUS' => 'EMPTY'
-        );
+    } else {
+        $result = array('STATUS' => 'EMPTY');
     }
     echo json_encode($result);
-}
-catch(PDOException $e) {
-    $result = array('status' => 'ERROR', 'error' => "Connection failed: " . $e->getMessage());
-    print(json_encode($result, JSON_PRETTY_PRINT));
+} catch (PDOException $e) {
+    $result = array(
+        'status' => 'ERROR',
+        'error' => "Connection failed: " . $e->getMessage()
+    );
+    print json_encode($result, JSON_PRETTY_PRINT);
     exit();
 }
-?>
