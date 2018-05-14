@@ -67,12 +67,6 @@ Only allow access from localhost (this is the most secure and common configurati
 MariaDB[(none)]> GRANT USAGE ON *.* TO 'myuser'@localhost IDENTIFIED BY 'mypassword';
 ```
 
-To allow access to MySQL server from any other computer on the network:
-
-```
-MariaDB[(none)]> GRANT USAGE ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword';
-```
-
 ### 4. Apply changes made
 
 To apply the changes of the new assigned permissions, you must finish with the following command:
