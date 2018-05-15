@@ -20,6 +20,22 @@ An `index.html` which loads the needed javascript libraries. The container app i
 stubs for the three other components are in `js/component-...js`. As well, `get_info.php` is provided
 which supplies dummy data for populating the app.
 
+## Initial Set Up
+
+```
+npm install
+```
+
+## Building
+
+```
+npm start
+```
+
+```
+php -S localhost:3000 -t dist/
+```
+
 ## Getting Data
 
 A dummy php script `get_info.php` is provided with some data. To get a list of courses
@@ -65,12 +81,6 @@ Only allow access from localhost (this is the most secure and common configurati
 
 ```
 MariaDB[(none)]> GRANT USAGE ON *.* TO 'myuser'@localhost IDENTIFIED BY 'mypassword';
-```
-
-To allow access to MySQL server from any other computer on the network:
-
-```
-MariaDB[(none)]> GRANT USAGE ON *.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword';
 ```
 
 ### 4. Apply changes made
