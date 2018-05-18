@@ -36,7 +36,7 @@ export default {
         };
     },
 
-    created() {
+    created: function () {
         fetch("get_info.php?course=" + this.$route.params.course)
             .then(response => {
                 return response.json();
