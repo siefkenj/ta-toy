@@ -140,3 +140,17 @@ Check if the newly created table is populated:
 ```
 MariaDB[database_name]> SELECT * FROM table_name;
 ```
+## Mocha testing
+
+#### Install all the dependencies 
+```
+$ npm install
+```
+#### Add the 'isomorphic-fetch' module
+```
+$ npm install --save isomorphic-fetch es6-promise
+```
+### Start the testing
+```
+$ npm test
+```
