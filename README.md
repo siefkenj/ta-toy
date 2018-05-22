@@ -140,3 +140,13 @@ Check if the newly created table is populated:
 ```
 MariaDB[database_name]> SELECT * FROM table_name;
 ```
+## Mocha testing
+
+#### Install all the dependencies 
+```
+$ npm install
+```
+#### Start the testing
+```
+$ npm test
+```
