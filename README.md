@@ -146,11 +146,7 @@ MariaDB[database_name]> SELECT * FROM table_name;
 ```
 $ npm install
 ```
-#### Add the 'isomorphic-fetch' module
-```
-$ npm install --save isomorphic-fetch es6-promise
-```
-### Start the testing
+#### Start the testing
 ```
 $ npm test
 ```
