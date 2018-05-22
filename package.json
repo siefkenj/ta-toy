@@ -16,6 +16,7 @@
         "vue-router": "^3.0.1"
     },
     "devDependencies": {
+        "@vue/test-utils": "^1.0.0-beta.16",
         "avoriaz": "^6.3.0",
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
@@ -25,11 +26,14 @@
         "copy-webpack-plugin": "^4.5.1",
         "cross-env": "^5.0.5",
         "css-loader": "^0.28.7",
+        "es6-promise": "^4.2.4",
         "file-loader": "^1.1.4",
+        "isomorphic-fetch": "^2.2.1",
         "jsdom": "^11.10.0",
         "jsdom-global": "^3.0.2",
         "mocha": "^5.1.1",
         "mocha-webpack": "^1.1.0",
+        "test-utils": "^1.1.1",
         "vue-loader": "^13.0.5",
         "vue-template-compiler": "^2.4.4",
         "webpack": "^3.6.0",
