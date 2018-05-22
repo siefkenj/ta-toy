@@ -16,6 +16,7 @@
         "vue-router": "^3.0.1"
     },
     "devDependencies": {
+        "@vue/test-utils": "^1.0.0-beta.16",
         "avoriaz": "^6.3.0",
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
@@ -32,6 +33,7 @@
         "jsdom-global": "^3.0.2",
         "mocha": "^5.1.1",
         "mocha-webpack": "^1.1.0",
+        "test-utils": "^1.1.1",
         "vue-loader": "^13.0.5",
         "vue-template-compiler": "^2.4.4",
         "webpack": "^3.6.0",
