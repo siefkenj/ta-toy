@@ -1,11 +1,11 @@
-import { shallowMount } from '@vue/test-utils';
-import { createLocalVue } from '@vue/test-utils';
+import { shallowMount } from "@vue/test-utils";
+import { createLocalVue } from "@vue/test-utils";
 import VueRouter from "vue-router";
-import sections from '../src/components/component-sections.vue';
+import sections from "../src/components/component-sections.vue";
 import courses from "../src/components/component-courses.vue";
 import TAs from "../src/components/component-tas.vue";
 import "isomorphic-fetch";
-import chai from 'chai';
+import chai from "chai";
 
 // Create a local vue-router instance in order to use route var
 const localVue = createLocalVue();
@@ -21,17 +21,14 @@ const router = new VueRouter({
 });
 let expect = chai.expect;
 
-describe('component-tas.vue', function () {
-    it('lifecycle-testing', function () {
+describe("component-tas.vue", function() {
+    it("lifecycle-testing", async function() {
         // Create a new sections instance
         const wrapper = shallowMount(TAs, {
             localVue,
             router
         });
-        // Testing when the fetch is resolved
-        wrapper.vm.$nextTick(() => {
-            expect(wrapper.vm.loading).to.be.equal(false);
-            done();
-        });
+        await wrapper.vm.$nextTick();
+        expect(wrapper.vm.loading).to.be.equal(false);
     });
 });
