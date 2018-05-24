@@ -8,7 +8,9 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-        "start": "webpack --watch",
+        "start": "concurrently --kill-others-on-fail \"npm run serve\" \"npm run watch\"",
+        "watch": "webpack --watch",
+        "serve": "cd dist && php -S 127.0.0.1:3000",
         "test": "mocha-webpack test/* --recursive --require test/.setup"
     },
     "dependencies": {
@@ -23,6 +25,7 @@
         "babel-preset-env": "^1.6.0",
         "babel-preset-stage-3": "^6.24.1",
         "chai": "^4.1.2",
+        "concurrently": "^3.5.1",
         "copy-webpack-plugin": "^4.5.1",
         "cross-env": "^5.0.5",
         "css-loader": "^0.28.7",
