@@ -1,3 +1,11 @@
+# Create Testuser
+CREATE USER 'myuser'@'localhost' IDENTIFIED BY 'mypassword';
+GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP ON *.* TO 'myuser'@'localhost';
+
+# Create DB
+CREATE DATABASE IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `mydb`;
+
 CREATE TABLE IF NOT EXISTS `mydb`.`courses` (
 		`Course` VARCHAR(255) NOT NULL,
 		`TA` VARCHAR(255) NOT NULL,
