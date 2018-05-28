@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/siefkenj/ta-toy.png?branch=master)](https://travis-ci.org/siefkenj/ta-toy)
+
 # ta-toy
 
 Toy application to learn how to use Vue.js
@@ -82,11 +84,12 @@ Only allow access from localhost (this is the most secure and common configurati
 ```
 MariaDB[(none)]> GRANT USAGE ON *.* TO 'myuser'@localhost IDENTIFIED BY 'mypassword';
 ```
+
 ### 4. Grant all privileges to a user on a specific database
 
 ```
-MariaDB[(none)]>  GRANT ALL privileges ON `mydb`.* TO 'myuser'@localhost;
-``` 
+MariaDB[(none)]>  GRANT ALL privileges ON 'mydb'.* TO 'myuser'@localhost;
+```
 
 ### 5. Apply changes made
 
@@ -145,13 +148,17 @@ Check if the newly created table is populated:
 ```
 MariaDB[database_name]> SELECT * FROM table_name;
 ```
+
 ## Mocha testing
 
-#### Install all the dependencies 
+#### Install all the dependencies
+
 ```
 $ npm install
 ```
+
 #### Start the testing
+
 ```
 $ npm test
 ```
