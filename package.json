@@ -10,6 +10,7 @@
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
         "start": "webpack && concurrently --kill-others-on-fail \"npm run serve\" \"webpack --watch\"",
         "travis_setup": "webpack",
+		"prettier_test": "prettier src/**/*.js --list-different",
         "serve": "cd dist && php -S 127.0.0.1:3000",
         "test": "mocha-webpack test/* --recursive --require test/.setup"
     },
