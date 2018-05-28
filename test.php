@@ -1,25 +1,25 @@
 <?php
 include 'db/config.php';
 // get the HTTP method, path and body of the request
-if ISSET($_SERVER['REQUEST_METHOD']){
+if (ISSET($_SERVER['REQUEST_METHOD'])){
 	$query = "";
 	$method = $_SERVER['REQUEST_METHOD'];
-	if ($method) {
+	switch ($method) {
 		case "POST":
-			$data = $_POST['DATA']
-			$query = handle_post($data)
+			$data = $_POST['DATA'];
+			$query = handle_post($data);
 			break;
 	  	case "GET":
-			$data = $_GET['DATA']
-			$query = handle_get($data)
+			$data = $_GET['DATA'];
+			$query = handle_get($data);
 			break;
 		case "PUT":
-			$data = file_get_contents('php://input')
-			$query = handle_put($data)
+			$data = file_get_contents('php://input');
+			$query = handle_put($data);
 			break;
-		case "DELETE"
-			$data = file_get_contents('php://input')
-			$query = handle_delete($data)
+		case "DELETE":
+			$data = file_get_contents('php://input');
+			$query = handle_delete($data);
 			break;
 	}
 }
