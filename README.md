@@ -85,13 +85,21 @@ Only allow access from localhost (this is the most secure and common configurati
 MariaDB[(none)]> GRANT USAGE ON *.* TO 'myuser'@localhost IDENTIFIED BY 'mypassword';
 ```
 
+### 4. Grant all privileges to a user on a specific database
+
+```
+MariaDB[(none)]>  GRANT ALL privileges ON 'mydb'.* TO 'myuser'@localhost;
+```
+
+### 5. Apply changes made
+
 To apply the changes of the new assigned permissions, you must finish with the following command:
 
 ```
 MariaDB[(none)]> FLUSH PRIVILEGES;
 ```
 
-### 5. Verify your new user has the right permissions
+### 6. Verify your new user has the right permissions
 
 ```
 MariaDB[(none)]> SHOW GRANTS FOR 'myuser'@localhost;

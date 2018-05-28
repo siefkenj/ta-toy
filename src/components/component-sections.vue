@@ -49,6 +49,7 @@ export default {
             .catch(err => {
                 this.error = true;
                 this.loading = false;
+                return Promise.reject();
             });
     }
 };
