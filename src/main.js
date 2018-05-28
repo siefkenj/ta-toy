@@ -12,7 +12,7 @@ const routes = [
     { path: "/", component: Courses },
     { path: "/course/:course/ta/:ta", name: "section", component: Sections },
     { path: "/course/:course", name: "TAs", component: TAs },
-    { path: "/*", component: Courses }
+         { path: "/*", component: Courses }
 ];
 
 const router = new VueRouter({
@@ -22,5 +22,5 @@ const router = new VueRouter({
 new Vue({
     el: "#app",
     router: router,
-    render: h => h(App)
+    render: (h) => h(App)
 });
