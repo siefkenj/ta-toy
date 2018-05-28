@@ -7,8 +7,8 @@ before_script:
     - npm run serve &
 script:
     - npm test
-    - prettier src/**/*.js --parser markdown --list-different
-    - prettier src/**/*.css --parser markdown --list-different
+    - prettier src/**/*.js --list-different
+    - prettier src/**/*.css --list-different
 cache:
   directories:
     - "node_modules"
