@@ -124,14 +124,7 @@ function handle_get(){
 
 }
 
-function handle_put($data)
-{
-	$result = get_params($data);
-	return update($result['table'], $data['data'], $result['condition']);
-}
-
-function get_params($data){
-	$url = parse($data["url"]);
+function url_to_params($url){
 	$result = array('table' => NULL, 'condition' => "");
 	$i=0;
 	foreach ($url as $key => $value) {
@@ -166,6 +159,15 @@ function get_params($data){
 	return $result;
 }
 
+function handle_put($data)
+{
+	$url = parse($data["url"]);
+	$result = get_params($url);
+	var_dump($result);
+	exit();
+	return update($result['table'], $data['data'], $result['condition']);
+}
+
 function handle_delete($data)
 {
 	$result = get_params($data);
@@ -176,8 +178,16 @@ function delete($table,$condition){
 	$query_stmt = "DELETE FROM $table WHERE $condition;";
 	return $query_stmt;
 }
+function check_white_list(){
+
+}
 function update($table, $data, $condition)
 {
+	$column = "";
+	foreach ($data as $key => $value) {
+		$column.= "$key = '$value',";
+	}
+	$column = rtrim($column, ", ");
 	$query_stmt = "UPDATE $table SET $column WHERE $condition;";
 	return $query_stmt;
 }
