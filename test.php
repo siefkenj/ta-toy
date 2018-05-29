@@ -114,7 +114,7 @@ function handle_post($data){
 	$keys = rtrim($keys, ", ");
 	$values = rtrim($values, ", ");
 
-	return "INSERT INTO mydb.courses ($keys) VALUES ($values);";
+	return "INSERT INTO courses ($keys) VALUES ($values);";
 
 }
 
@@ -124,12 +124,53 @@ function handle_get(){
 
 function handle_put($data)
 {
-	$table = $data["Entity"];
-	$column = $data["data"];
-	$condition = $data["parameters"];
-	$query_stmt = "";
+	$result = url_to_params($data);
+	return update($result['table'], $result['columns'], $result['condition']);
+}
 
-	return update($table, $column, $condition);
+function url_to_params($data){
+	$url = parse($data["url"]);
+	$result = array('table' => NULL, 'columns' => '', 'condition' => "");
+	$i=0;
+	foreach ($url as $key => $value) {
+		if($value != NULL){
+			switch($key){
+				case 'users':
+					$result['condition'] .= "utorid = '$value',";
+					break;
+				case 'courses':
+					$result['condition'] .= "course_code = '$value',";
+					break;
+				case 'sections':
+					$result['condition'] .= "section_id = $value,";
+					break;
+				case 'survey':
+					$result['condition'] .= "id = $value,";
+					break;
+				case 'responses':
+					$result['condition'] .= "response_id = $value,";
+					break;
+				default:
+					$error = "invalid url key";
+					throw new Exception($error);
+			}
+		}
+		++$i;
+		if($i == count($url)){
+			$result['table'] = $key;
+		}
+	}
+	if(count($data['data']) == 0){
+		$result['columns'] .= "*";
+	}else{
+		foreach ($data['data'] as $key => $value) {
+			$result['columns'] .= "$key = '$value',";
+		}
+	}
+
+	$result['columns'] = rtrim($result['columns'], ", ");
+	$result['condition'] = rtrim($result['condition'], ", ");
+	return $result;
 }
 
 function handle_delete($data)
@@ -149,17 +190,6 @@ function delete($table,$condition){
 }
 function update($table, $column, $condition)
 {
-	$query_stmt = "";
-	$all_column = "";
-	$all_condition = "";
-	foreach ($column as $col_key => $col_value) {
-		$all_column .= "$col_key = '$col_value',";
-	}
-	foreach ($condition as $cond_key => $cond_value) {
-		$all_condition .= "$cond_key = '$cond_value',";
-	}
-	$all_column = rtrim($all_column, ',');
-	$all_condition = rtrim($all_condition, ',');
-	$query_stmt .= "UPDATE $table SET $all_column WHERE $all_condition;";
+	$query_stmt = "UPDATE $table SET $column WHERE $condition;";
 	return $query_stmt;
 }
