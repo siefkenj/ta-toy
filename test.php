@@ -124,13 +124,13 @@ function handle_get(){
 
 function handle_put($data)
 {
-	$result = url_to_params($data);
-	return update($result['table'], $result['columns'], $result['condition']);
+	$result = get_params($data);
+	return update($result['table'], $data['data'], $result['condition']);
 }
 
-function url_to_params($data){
+function get_params($data){
 	$url = parse($data["url"]);
-	$result = array('table' => NULL, 'columns' => '', 'condition' => "");
+	$result = array('table' => NULL, 'condition' => "");
 	$i=0;
 	foreach ($url as $key => $value) {
 		if($value != NULL){
@@ -160,35 +160,21 @@ function url_to_params($data){
 			$result['table'] = $key;
 		}
 	}
-	if(count($data['data']) == 0){
-		$result['columns'] .= "*";
-	}else{
-		foreach ($data['data'] as $key => $value) {
-			$result['columns'] .= "$key = '$value',";
-		}
-	}
-
-	$result['columns'] = rtrim($result['columns'], ", ");
 	$result['condition'] = rtrim($result['condition'], ", ");
 	return $result;
 }
 
 function handle_delete($data)
 {
-	$table = $data["Entity"];
-	$condition = $data["parameters"];
-
-	return delete($table, $condition);
+	$result = get_params($data);
+	return delete($result['table'], $result['condition']);
 }
 
 function delete($table,$condition){
-	$query_stmt = "";
-	foreach($condition as $key => $value){
-		$query_stmt .= "DELETE FROM $table WHERE $key = $value;";
-	}
+	$query_stmt = "DELETE FROM $table WHERE $condition;";
 	return $query_stmt;
 }
-function update($table, $column, $condition)
+function update($table, $data, $condition)
 {
 	$query_stmt = "UPDATE $table SET $column WHERE $condition;";
 	return $query_stmt;
