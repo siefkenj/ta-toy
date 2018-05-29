@@ -105,18 +105,18 @@ function parse($url){
 }
 
 function handle_post($data){
-	$result = get_params($data);
-	print_r($result);
+	$result = url_to_params(parse($data["url"]));
+
 	$keys = "";
 	$values = "";
 	foreach($data['data'] as $key=>$value){
 		$keys.=$key . ", ";
-		$values.=$value . ", ";
+		$values.="'". $value . "', ";
 	}
 	$keys = rtrim($keys, ", ");
 	$values = rtrim($values, ", ");
 
-	return "INSERT INTO courses ($keys) VALUES ($values);";
+	return "INSERT INTO ta_feedback.$result[table] ($keys) VALUES ($values);";
 
 }
 
