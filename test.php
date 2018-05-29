@@ -8,15 +8,19 @@ try {
 		$data = json_decode(file_get_contents("php://input"), true);
         switch ($method) {
             case "POST":
+				error_check($data, TRUE);
                 $query = handle_post($data);
                 break;
             case "GET":
+				error_check($data, FALSE);
                 $query = handle_get($data);
                 break;
             case "PUT":
+				error_check($data, TRUE);
                 $query = handle_put($data);
                 break;
             case "DELETE":
+				error_check($data, FALSE);
                 $query = handle_delete($data);
                 break;
         }
@@ -51,14 +55,6 @@ try {
     exit();
 }
 
-function handle_post()
-{
-
-}
-function handle_get()
-{
-
-}
 function handle_put($data)
 {
 	if (!isset($data["Entity"])) {
@@ -84,15 +80,6 @@ function handle_put($data)
 
 function handle_delete($data)
 {
-	if (!isset($data["Entity"])) {
-		$error = 'No Entity Selected';
-		throw new Exception($error);
-	}
-
-	if (!isset($data["parameters"])) {
-		$error = 'No parameters Selected';
-		throw new Exception($error);
-	}
 	$table = $data["Entity"];
 	$condition = $data["parameters"];
 
@@ -100,15 +87,44 @@ function handle_delete($data)
 	exit();
 }
 
-function delete($table, $condition)
-{
+function error_check($data, $need_data){
+	if (!isset($data["url"])){
+		$error = "No URL Selected";
+		throw new Exception($error);
+	}
+	if ($need_data){
+		if (!isset($data["data"])){
+			$error = "No Data";
+			throw new Exception($error);
+		}
+	}
+}
+
+function handle_post($data){
+	$keys = "";
+	$values = "";
+	foreach($data['data'] as $key=>$value){
+		$keys.=$key . ", ";
+		$values.=$value . ", ";
+	}
+	$keys = rtrim($keys, ", ");
+	$values = rtrim($values, ", ");
+
+	return "INSERT INTO mydb.courses ($keys) VALUES ($values);";
+
+	exit();
+}
+
+function handle_get(){
+
+}
+function delete($table,$condition){
 	$query_stmt = "";
-	foreach ($condition as $key => $value) {
+	foreach($condition as $key => $value){
 		$query_stmt .= "DELETE FROM $table WHERE $key = $value;";
 	}
 	return $query_stmt;
 }
-
 function update($table, $column, $condition)
 {
 	$query_stmt = "";
@@ -124,8 +140,4 @@ function update($table, $column, $condition)
 	$all_condition = rtrim($all_condition, ',');
 	$query_stmt .= "UPDATE $table SET $all_column WHERE $all_condition;";
 	return $query_stmt;
-}
-function arr_get($array, $key, $default = null)
-{
-	return isset($array[$key]) ? $array[$key] : $default;
 }
