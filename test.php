@@ -105,6 +105,8 @@ function parse($url){
 }
 
 function handle_post($data){
+	$result = get_params($data);
+	print_r($result);
 	$keys = "";
 	$values = "";
 	foreach($data['data'] as $key=>$value){
