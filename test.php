@@ -6,7 +6,7 @@ if (ISSET($_SERVER['REQUEST_METHOD'])){
 	$method = $_SERVER['REQUEST_METHOD'];
 	switch ($method) {
 		case "POST":
-			$data = $_POST['DATA'];
+			$data = file_get_contents('php://input');
 			$query = handle_post($data);
 			break;
 	  	case "GET":
@@ -26,10 +26,22 @@ if (ISSET($_SERVER['REQUEST_METHOD'])){
 
 
 
-function handle_post (){
+function handle_post ($data){
+	// $course = mysql_real_escape_string($conn, $_POST['course']);
+	// $name = mysql_real_escape_string($conn, $_POST['name']);
+	// $tutorial = mysql_real_escape_string($conn, $_POST['tutorial']);
+	//echo $_POST['course'];
+	$obj = json_decode($data,true);
+	// echo $obj['course'];
+	// echo $obj['name'];
+	// echo $obj['tutorial'];
+	echo "INSERT INTO mydb.courses (Course, TA, Section) VALUES ($obj[course], $obj[name], $obj[tutorial]);";
+	return "INSERT INTO mydb.courses (Course, TA, Section) VALUES ($obj[course],$obj[name],$obj[tutorial]);";
+	//return "insert into mydb.courses values('$obj['course']','$obj['name']','$obj['tutorial']');";
 
+	exit();
 }
-function handle_get (){
+function handle_get ($data){
 
 }
 function handle_put (){
