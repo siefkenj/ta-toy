@@ -2,6 +2,7 @@
 include 'db/config.php';
 // get the HTTP method, path and body of the request
 try {
+	$method = "";
     if (isset($_SERVER['REQUEST_METHOD'])) {
         $query = "";
         $method = $_SERVER['REQUEST_METHOD'];
@@ -24,7 +25,10 @@ try {
                 $query = handle_delete($data);
                 break;
         }
-    }
+    }else{
+		$error = 'No Request Method Found';
+		throw new Exception($error);
+	}
     // connect to the mysql database
     $conn = new PDO(
         "mysql:host=$servername;dbname=$databasename",
@@ -37,14 +41,19 @@ try {
     $stmt = $conn->prepare($query);
     $stmt->execute();
 
-    // set the resulting array to associative
-    $fetched = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-    if (count($query) >= 1) {
-        $result['STATUS'] = 'OK';
-        $result['DATA'] = $fetched;
-    } else {
-        $result = array('STATUS' => 'EMPTY');
-    }
+	if($method == "GET"){
+		// set the resulting array to associative
+		$fetched = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+		if (count($query) >= 1) {
+			$result['STATUS'] = 'OK';
+			$result['DATA'] = $fetched;
+		} else {
+			$result = array('STATUS' => 'EMPTY');
+		}
+	}else{
+		$result = array('STATUS' => 'SUCCESS');
+	}
+
     echo json_encode($result);
 } catch (PDOException $e) {
     $result = array(
@@ -74,8 +83,8 @@ function handle_put($data)
 	$condition = $data["parameters"];
 	$query_stmt = "";
 
-	echo update($table, $column, $condition);
-	exit();
+	return update($table, $column, $condition);
+
 }
 
 function handle_delete($data)
@@ -83,8 +92,7 @@ function handle_delete($data)
 	$table = $data["Entity"];
 	$condition = $data["parameters"];
 
-	echo delete($table, $condition);
-	exit();
+	return  delete($table, $condition);
 }
 
 function error_check($data, $need_data){
@@ -131,10 +139,10 @@ function update($table, $column, $condition)
 	$all_column = "";
 	$all_condition = "";
 	foreach ($column as $col_key => $col_value) {
-		$all_column .= "$col_key = $col_value,";
+		$all_column .= "$col_key = '$col_value',";
 	}
 	foreach ($condition as $cond_key => $cond_value) {
-		$all_condition .= "$cond_key = $cond_value,";
+		$all_condition .= "$cond_key = '$cond_value',";
 	}
 	$all_column = rtrim($all_column, ',');
 	$all_condition = rtrim($all_condition, ',');
