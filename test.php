@@ -1,6 +1,7 @@
 <?php
 include 'db/config.php';
 // get the HTTP method, path and body of the request
+CONST WHITE_LIST = ["name","photo","title","department_name"];
 try {
 	$method = "";
     if (isset($_SERVER['REQUEST_METHOD'])) {
@@ -122,6 +123,7 @@ function handle_get(){
 
 }
 
+
 function url_to_params($url){
 	$result = array('table' => NULL, 'condition' => "");
 	$i=0;
@@ -129,19 +131,19 @@ function url_to_params($url){
 		if($value != NULL){
 			switch($key){
 				case 'users':
-					$result['condition'] .= "utorid = '$value',";
+					$result['condition'] .= "utorid = '$value' AND ";
 					break;
 				case 'courses':
-					$result['condition'] .= "course_code = '$value',";
+					$result['condition'] .= "course_code = '$value' AND ";
 					break;
 				case 'sections':
-					$result['condition'] .= "section_id = $value,";
+					$result['condition'] .= "section_id = $value AND ";
 					break;
 				case 'survey':
-					$result['condition'] .= "id = $value,";
+					$result['condition'] .= "id = $value AND ";
 					break;
 				case 'responses':
-					$result['condition'] .= "response_id = $value,";
+					$result['condition'] .= "response_id = $value AND ";
 					break;
 				default:
 					$error = "invalid url key";
@@ -153,14 +155,14 @@ function url_to_params($url){
 			$result['table'] = $key;
 		}
 	}
-	$result['condition'] = rtrim($result['condition'], ", ");
+	$result['condition'] = substr($result['condition'], 0,-4);
 	return $result;
 }
 
 function handle_put($data)
 {
 	$url = parse($data["url"]);
-	$result = get_params($url);
+	$result = url_to_params($url);
 	var_dump($result);
 	exit();
 	return update($result['table'], $data['data'], $result['condition']);
@@ -176,8 +178,10 @@ function delete($table,$condition){
 	$query_stmt = "DELETE FROM $table WHERE $condition;";
 	return $query_stmt;
 }
-function check_white_list(){
-
+function check_white_list($data){
+	foreach ($data as $key => $value) {
+		$column.= "$key = '$value',";
+	}
 }
 function update($table, $data, $condition)
 {
