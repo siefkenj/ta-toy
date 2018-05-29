@@ -9,6 +9,7 @@ try {
 		$data = json_decode(file_get_contents("php://input"), true);
         switch ($method) {
             case "POST":
+                $url = parse($data["url"]);
 				error_check($data, TRUE);
                 $query = handle_post($data);
                 break;
@@ -63,38 +64,6 @@ try {
     print json_encode($result, JSON_PRETTY_PRINT);
     exit();
 }
-
-function handle_put($data)
-{
-	if (!isset($data["Entity"])) {
-		$error = 'No Entity Selected';
-		throw new Exception($error);
-	}
-	if (!isset($data["data"])) {
-		$error = 'No data Selected';
-		throw new Exception($error);
-	}
-	if (!isset($data["parameters"])) {
-		$error = 'No parameters Selected';
-		throw new Exception($error);
-	}
-	$table = $data["Entity"];
-	$column = $data["data"];
-	$condition = $data["parameters"];
-	$query_stmt = "";
-
-	return update($table, $column, $condition);
-
-}
-
-function handle_delete($data)
-{
-	$table = $data["Entity"];
-	$condition = $data["parameters"];
-
-	return  delete($table, $condition);
-}
-
 function error_check($data, $need_data){
 	if (!isset($data["url"])){
 		$error = "No URL Selected";
@@ -106,6 +75,33 @@ function error_check($data, $need_data){
 			throw new Exception($error);
 		}
 	}
+}
+
+function parse($url){
+    // Splitting string by /
+    $url_arr = preg_split("/\//", $url);
+
+    // If there are odd number of parameters, the max even number of parameters
+    // are stored in the associative array. The remaining one will be added
+    // later and the value will be set to null.
+    $odd = FALSE;
+    if (sizeof($url_arr)%2==0){
+        $max = sizeof($url_arr);
+    }else{
+        $max = sizeof($url_arr)-1;
+        $odd = TRUE;
+    }
+
+    $parsed_url = array();
+    for ($index = 0; $index<$max; $index+=2){
+        $parsed_url[$url_arr[$index]] = $url_arr[$index+1];
+    }
+
+    if ($odd){
+        $parsed_url[$url_arr[$max]] = NULL;
+    }
+
+    return $parsed_url;
 }
 
 function handle_post($data){
@@ -120,12 +116,30 @@ function handle_post($data){
 
 	return "INSERT INTO mydb.courses ($keys) VALUES ($values);";
 
-	exit();
 }
 
 function handle_get(){
 
 }
+
+function handle_put($data)
+{
+	$table = $data["Entity"];
+	$column = $data["data"];
+	$condition = $data["parameters"];
+	$query_stmt = "";
+
+	return update($table, $column, $condition);
+}
+
+function handle_delete($data)
+{
+	$table = $data["Entity"];
+	$condition = $data["parameters"];
+
+	return delete($table, $condition);
+}
+
 function delete($table,$condition){
 	$query_stmt = "";
 	foreach($condition as $key => $value){
