@@ -2,10 +2,19 @@
 include 'db/config.php';
 // get the HTTP method, path and body of the request
 CONST WHITE_LIST = ["name","photo","title","department_name"];
+
 try {
 	$method = "";
+	// Determine seperately whether it is a GET Request
+	$query = "";
+	if (isset($_GET["url"])) {
+		$url = $_GET["url"];
+		$url_ = urldecode($url);
+		$url_arr = parse($url_);
+		$query = "SELECT * FROM courses WHERE " . url_to_params($url_arr)["condition"];
+	}
+
     if (isset($_SERVER['REQUEST_METHOD'])) {
-        $query = "";
         $method = $_SERVER['REQUEST_METHOD'];
 		$data = json_decode(file_get_contents("php://input"), true);
         switch ($method) {
@@ -13,10 +22,6 @@ try {
                 $url = parse($data["url"]);
 				error_check($data, TRUE);
                 $query = handle_post($data);
-                break;
-            case "GET":
-				error_check($data, FALSE);
-                $query = handle_get($data);
                 break;
             case "PUT":
 				error_check($data, TRUE);
@@ -106,22 +111,16 @@ function parse($url){
 }
 
 function handle_post($data){
-	$result = url_to_params(parse($data["url"]));
-
 	$keys = "";
 	$values = "";
 	foreach($data['data'] as $key=>$value){
 		$keys.=$key . ", ";
-		$values.="'". $value . "', ";
+		$values.=$value . ", ";
 	}
 	$keys = rtrim($keys, ", ");
 	$values = rtrim($values, ", ");
 
-	return "INSERT INTO ta_feedback.$result[table] ($keys) VALUES ($values);";
-
-}
-
-function handle_get(){
+	return "INSERT INTO courses ($keys) VALUES ($values);";
 
 }
 
