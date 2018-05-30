@@ -3,19 +3,18 @@ include 'db/config.php';
 // get the HTTP method, path and body of the request
 CONST WHITE_LIST = ["name","photo","title","department_name"];
 
-// Determine seperately whether it is a GET Request
-$query = "";
-if (isset($_GET["url"])) {
-	$url = $_GET["url"];
-	$url_ = urldecode($url);
-	$url_arr = parse($url_);
-	$query = "SELECT * FROM courses WHERE " . url_to_params($url_arr)["condition"];
-	echo $query;
-}
-
-
 try {
 	$method = "";
+	// Determine seperately whether it is a GET Request
+	$query = "";
+	if (isset($_GET["url"])) {
+		$url = $_GET["url"];
+		$url_ = urldecode($url);
+		$url_arr = parse($url_);
+		$query = "SELECT * FROM courses WHERE " . url_to_params($url_arr)["condition"];
+		echo $query;
+	}
+
     if (isset($_SERVER['REQUEST_METHOD'])) {
         $method = $_SERVER['REQUEST_METHOD'];
 		$data = json_decode(file_get_contents("php://input"), true);
