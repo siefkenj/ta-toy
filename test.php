@@ -185,6 +185,87 @@ function check_white_list($data){
 		$column.= "$key = '$value',";
 	}
 }
+/**
+ * Checks if column exists within database.
+ *
+ * @param columns array containing column names
+ * @param table table name
+ *
+ * @throws invalid_column error thrown if column doesn't exist
+ */
+function check_columns($columns, $table){
+	$course_question_choice = array('survey_id', 'question_id', 'user_id', 'locked', 'position');
+	$courses = array('course_code', 'title', 'department_name');
+	$department = array('name');
+	$dept_question_choice = array('department_id', 'term', 'question_id', 'user_id', 'locked', 'position');
+	$questions = array('question_id', 'answer_type', 'content');
+	$response =array('response_id', 'survey_instance_id', 'question_id', 'answer', 'user_id');
+	$sections = array('section_id', 'course_id', 'term', 'meeting_time', 'room', 'section_code');
+	$survey_instances = array('id', 'user_association_id', 'override_token', 'time_window', 'start_time');
+	$surveys =array('id', 'name', 'course_id', 'term', 'default_time_window', 'default_start_time');
+	$ta_question_choice = array('survey_id', 'section_id', 'term', 'question_id', 'user_id', 'locked', 'position');
+	$user_association =array('id', 'user_id', 'course_id', 'section_code');
+	//TODO: fix database
+	$users =array('utorid', 'type', 'name1', 'photo1');
+
+	$selected_table;
+	switch($table){
+		case 'course_question_choice':
+			$selected_table = $course_question_choice;
+			break;
+
+		case 'courses':
+			$selected_table = $courses;
+			break;
+
+		case 'department':
+			$selected_table = $department;
+			break;
+
+		case 'dept_question_choice':
+			$selected_table = $dept_question_choice;
+			break;
+
+		case 'questions';
+			$selected_table = $questions;
+			break;
+
+		case 'response':
+			$selected_table = $response;
+			break;
+
+		case 'sections':
+			$selected_table = $sections;
+			break;
+
+		case 'survey_instances':
+			$selected_table = $survey_instances;
+			break;
+
+		case 'surveys':
+			$selected_table = $surveys;
+			break;
+
+		case '$ta_question_choice':
+			$selected_table = $ta_question_choice;
+			break;
+
+		case 'user_association':
+			$selected_table = $user_association;
+			break;
+
+		case 'users':
+			$selected_table = $users;
+			break;
+	}
+
+	foreach($columns as $column){
+		if (!in_array($column, $selected_table)){
+			throw new Exception('Column: '. $column . ' does not exist');
+		}
+	}
+	break;
+}
 function update($table, $data, $condition)
 {
 	$column = "";
