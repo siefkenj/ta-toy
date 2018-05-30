@@ -131,12 +131,14 @@ function handle_post($data){
 	$keys = rtrim($keys, ", ");
 	$values = rtrim($values, ", ");
 
-	try{
-		check_columns(array_keys($data['data']), $result['table']);
-	}catch(Exception $e){
-		die("Could not post.");
-	}
+	check_columns(array_keys($data['data']), $result['table'], 'post');
 
+	// try{
+	// 	check_columns(array_keys($data['data']), $result['table'], 'post');
+	// }catch(Exception $e){
+	// 	die("Could not post.");
+	// }
+    //
 	return "INSERT INTO ta_feedback.$result[table] ($keys) VALUES ($values);";
 
 }
@@ -147,6 +149,7 @@ function handle_get($url){
 	$result = url_to_params($parsed_url);
 	$table = $result['table'];
 	$conditions =  $result['condition'];
+	check_columns(array_keys($data['data']), $result['table'], 'get');
 	if ($conditions == ""){
 		return "SELECT * FROM $table";
 	}else{
@@ -199,6 +202,7 @@ function handle_put($data)
 {
 	$url = parse($data["url"]);
 	$result = url_to_params($url);
+	check_columns(array_keys($data['data']), $result['table'], 'put');
 	return update($result['table'], $data['data'], $result['condition']);
 }
 
@@ -208,6 +212,7 @@ function handle_put($data)
 function handle_delete($data)
 {
 	$result = url_to_params(parse($data["url"]));
+	check_columns(array_keys($data['data']), $result['table'], 'delete');
 	return delete($result['table'], $result['condition']);
 }
 
@@ -229,64 +234,84 @@ function check_white_list($data){
  *
  * @param columns array containing column names
  * @param table table name
+ * @param operation the operation performed (POST, GET, PUT, DELETE)
  *
  * @throws invalid_column error thrown if column doesn't exist
  */
-function check_columns($columns, $table){
-	$course_question_choice = array('survey_id', 'question_id', 'user_id', 'locked', 'position');
+function check_columns($columns, $table, $operation){
+	$course_question_choice = array('question_id', 'user_id', 'locked', 'position');
 	$courses = array('course_code', 'title', 'department_name');
 	$department = array('name');
 	$dept_question_choice = array('department_id', 'term', 'question_id', 'user_id', 'locked', 'position');
-	$questions = array('question_id', 'answer_type', 'content');
-	$response =array('response_id', 'survey_instance_id', 'question_id', 'answer', 'user_id');
-	$sections = array('section_id', 'course_id', 'term', 'meeting_time', 'room', 'section_code');
-	$survey_instances = array('id', 'user_association_id', 'override_token', 'time_window', 'start_time');
-	$surveys =array('id', 'name', 'course_id', 'term', 'default_time_window', 'default_start_time');
-	$ta_question_choice = array('survey_id', 'section_id', 'term', 'question_id', 'user_id', 'locked', 'position');
-	$user_association =array('id', 'user_id', 'course_id', 'section_code');
-	//TODO: fix database
+	$questions = array('answer_type', 'content');
+	$response =array('survey_instance_id', 'question_id', 'answer', 'user_id');
+	$sections = array('course_id', 'term', 'meeting_time', 'room', 'section_code');
+	$survey_instances = array('user_association_id', 'override_token', 'time_window', 'start_time');
+	$surveys =array('name', 'course_id', 'term', 'default_time_window', 'default_start_time');
+	$ta_question_choice = array('section_id', 'term', 'question_id', 'user_id', 'locked', 'position');
+	$user_association =array('user_id', 'course_id', 'section_code');
 	$users =array('utorid', 'type', 'name1', 'photo1');
 
-	$selected_table;
+	$selected_table = NULL;
 	switch($table){
 		case 'course_question_choice':
-			$selected_table = $course_question_choice;
+			if ($operation!='delete'){
+				$selected_table = $course_question_choice;
+			}
 			break;
 
 		case 'courses':
-			$selected_table = $courses;
+			if ($operation!='put'){
+				$selected_table = $courses;
+			}
 			break;
 
 		case 'department':
-			$selected_table = $department;
+			if ($operation!='delete'){
+				$selected_table = $department;
+			}
 			break;
 
 		case 'dept_question_choice':
-			$selected_table = $dept_question_choice;
+			if ($operation!='delete'){
+				$selected_table = $dept_question_choice;
+			}
 			break;
 
 		case 'questions';
-			$selected_table = $questions;
+			if (($operation!='put')or($operation!='delete')){
+				$selected_table = $questions;
+			}
 			break;
 
 		case 'response':
-			$selected_table = $response;
+			if (($operation!='put')or($operation!='delete')){
+				$selected_table = $response;
+			}
 			break;
 
 		case 'sections':
-			$selected_table = $sections;
+			if ($operation!='put'){
+				$selected_table = $sections;
+			}
 			break;
 
 		case 'survey_instances':
-			$selected_table = $survey_instances;
+			if (($operation!='put')or($operation!='delete')){
+				$selected_table = $survey_instances;
+			}
 			break;
 
 		case 'surveys':
-			$selected_table = $surveys;
+			if (($operation!='put')or($operation!='delete')){
+				$selected_table = $surveys;
+			}
 			break;
 
 		case '$ta_question_choice':
-			$selected_table = $ta_question_choice;
+			if ($operation!='delete'){
+				$selected_table = $ta_question_choice;
+			}
 			break;
 
 		case 'user_association':
@@ -296,11 +321,38 @@ function check_columns($columns, $table){
 		case 'users':
 			$selected_table = $users;
 			break;
+
+		default:
+			throw new Exception('Table: '. $table . ' does not exist');
+			break;
+	}
+	if(!(isset($selected_table))){
+		throw new Exception("Invalid operation");
+	}
+
+	if ($operation=='post'){
+		if (sizeof($columns)!=sizeof($selected_table)){
+			throw new Exception("Invalid number of columns");
+		}
 	}
 
 	foreach($columns as $column){
 		if (!in_array($column, $selected_table)){
 			throw new Exception('Column: '. $column . ' does not exist');
+		}
+	}
+
+	if ($operation=='put'){
+		if ($selected_table == $users){
+			if (sizeof($columns)>2){
+				throw new Exception("Invalid request");
+			}
+
+			foreach($columns as $column){
+				if (($column!='name1') && ($column!='photo1')){
+					throw new Exception('Column: '. $column . ' modification not authorized');
+				}
+			}
 		}
 	}
 }
