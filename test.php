@@ -1,7 +1,8 @@
 <?php
 include 'db/config.php';
 // get the HTTP method, path and body of the request
-CONST WHITE_LIST = ["name","photo","title","department_name"];
+CONST WHITELIST = ["name","photo","title","department_name"];
+
 try {
 	$method = "";
     if (isset($_SERVER['REQUEST_METHOD'])) {
@@ -10,13 +11,16 @@ try {
 		$data = json_decode(file_get_contents("php://input"), true);
         switch ($method) {
             case "POST":
-                $url = parse($data["url"]);
 				error_check($data, TRUE);
                 $query = handle_post($data);
                 break;
             case "GET":
-				error_check($data, FALSE);
-                $query = handle_get($data);
+				if (!isset($_GET["url"])) {
+					$error = 'Invalid param for GET';
+					throw new Exception($error);
+				}
+				$url = $_GET["url"];
+				$query = handle_get($url);
                 break;
             case "PUT":
 				error_check($data, TRUE);
@@ -31,21 +35,30 @@ try {
 		$error = 'No Request Method Found';
 		throw new Exception($error);
 	}
-    // connect to the mysql database
-    $conn = new PDO(
-        "mysql:host=$servername;dbname=$databasename",
-        $username,
-        $password
+} catch (Exception $e) {
+    $result = array(
+        'status' => 'ERROR',
+        'error' => "Connection failed: " . $e->getMessage()
     );
+    print json_encode($result, JSON_PRETTY_PRINT);
+    exit();
+}
 
+try {
+	// connect to the mysql database
+	$conn = new PDO(
+		"mysql:host=$servername;dbname=$databasename",
+		$username,
+		$password
+	);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt = $conn->prepare($query);
     $stmt->execute();
 
 	if($method == "GET"){
-		// set the resulting array to associative
-		$fetched = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+		//fetch all results
+		$fetched = $stmt->fetchAll();
 		if (count($query) >= 1) {
 			$result['STATUS'] = 'OK';
 			$result['DATA'] = $fetched;
@@ -66,6 +79,7 @@ try {
     exit();
 }
 function error_check($data, $need_data){
+
 	if (!isset($data["url"])){
 		$error = "No URL Selected";
 		throw new Exception($error);
@@ -117,15 +131,32 @@ function handle_post($data){
 	$keys = rtrim($keys, ", ");
 	$values = rtrim($values, ", ");
 
+	try{
+		check_columns(array_keys($data['data']), $result['table']);
+	}catch(Exception $e){
+		die("Could not post.");
+	}
+
 	return "INSERT INTO ta_feedback.$result[table] ($keys) VALUES ($values);";
 
 }
 
-function handle_get(){
-
+function handle_get($url){
+	//parses 'url' field from url then parse it with the parse function
+	$parsed_url = parse(urldecode($url));
+	$result = url_to_params($parsed_url);
+	$table = $result['table'];
+	$conditions =  $result['condition'];
+	if ($conditions == ""){
+		return "SELECT * FROM $table";
+	}else{
+		return "SELECT * FROM $table WHERE $conditions";
+	}
 }
 
-
+/**
+* @return returns an associative array that provies the table and condition to operate on
+*/
 function url_to_params($url){
 	$result = array('table' => NULL, 'condition' => "");
 	$i=0;
@@ -161,22 +192,30 @@ function url_to_params($url){
 	return $result;
 }
 
+/**
+* @return returns an SQL statment that updates a row
+*/
 function handle_put($data)
 {
 	$url = parse($data["url"]);
 	$result = url_to_params($url);
-	var_dump($result);
-	exit();
 	return update($result['table'], $data['data'], $result['condition']);
 }
 
+/**
+* @return returns an SQL statment that deletes a row
+*/
 function handle_delete($data)
 {
-	$result = get_params($data);
+	$result = url_to_params(parse($data["url"]));
 	return delete($result['table'], $result['condition']);
 }
 
-function delete($table,$condition){
+/**
+* @return returns an SQL statment that deletes a row
+*/
+function delete($table,$condition)
+{
 	$query_stmt = "DELETE FROM $table WHERE $condition;";
 	return $query_stmt;
 }
@@ -264,7 +303,6 @@ function check_columns($columns, $table){
 			throw new Exception('Column: '. $column . ' does not exist');
 		}
 	}
-	break;
 }
 function update($table, $data, $condition)
 {
@@ -276,3 +314,4 @@ function update($table, $data, $condition)
 	$query_stmt = "UPDATE $table SET $column WHERE $condition;";
 	return $query_stmt;
 }
+?>
