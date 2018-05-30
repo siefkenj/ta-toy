@@ -12,7 +12,6 @@ try {
 		$url_ = urldecode($url);
 		$url_arr = parse($url_);
 		$query = "SELECT * FROM courses WHERE " . url_to_params($url_arr)["condition"];
-		echo $query;
 	}
 
     if (isset($_SERVER['REQUEST_METHOD'])) {
