@@ -11,9 +11,8 @@ try {
 		$data = json_decode(file_get_contents("php://input"), true);
         switch ($method) {
             case "POST":
-                $url = parse($data["url"]);
 				error_check($data, TRUE);
-                $query = handle_post($url);
+                $query = handle_post($data);
                 break;
             case "GET":
 				if (!isset($_GET["url"])) {
@@ -28,9 +27,8 @@ try {
                 $query = handle_put($data);
                 break;
             case "DELETE":
-				$url = parse($data["url"]);
 				error_check($data, FALSE);
-                $query = handle_delete($url);
+                $query = handle_delete($data);
                 break;
         }
     }else{
@@ -203,7 +201,7 @@ function handle_put($data)
 */
 function handle_delete($data)
 {
-	$result = url_to_params($data);
+	$result = url_to_params(parse($data["url"]));
 	return delete($result['table'], $result['condition']);
 }
 
